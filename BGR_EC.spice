@@ -1,0 +1,52 @@
+** sch_path: /home/ubuntu/Desktop/xschem/BGR_EC.sch
+**.subckt BGR_EC
+XQ1 GNDA GNDA net2 sky130_fd_pr__pnp_05v5_W3p40L3p40
+XQ2 GNDA GNDA net1 sky130_fd_pr__pnp_05v5_W3p40L3p40
+V8 GNDA 0 0
+.save  v(net2)
+.save  v(net3)
+XM1 VDDA net4 net5 VDDA sky130_fd_pr__pfet_01v8 L=2 W=18.23 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+XM2 VDDA net4 net6 VDDA sky130_fd_pr__pfet_01v8 L=2 W=18.23 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+V1 VDDA 0 1.8
+E1 net4 net7 net3 net2 1Meg
+V2 net7 GNDA 0.6
+Vmeas1 net5 net2 0
+.save  i(vmeas1)
+Vmeas2 net6 net3 0
+.save  i(vmeas2)
+R8 vref GNDA 20k m=1
+XM3 VDDA net4 vref VDDA sky130_fd_pr__pfet_01v8 L=2 W=18.23 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+R1 net2 GNDA 144.368k m=1
+R3 net3 net1 14.584k m=1
+R2 net3 GNDA 144.368k m=1
+**** begin user architecture code
+
+** opencircuitdesign pdks install
+.lib /usr/local/share/pdk/sky130B/libs.tech/ngspice/sky130.lib.spice tt
+
+
+
+.control
+save all
+save @m.xm1.msky130_fd_pr__pfet_01v8[vth]
+save @m.xm1.msky130_fd_pr__pfet_01v8[id]
+save @m.xm1.msky130_fd_pr__pfet_01v8[gds]
+save @m.xm1.msky130_fd_pr__pfet_01v8[gm]
+save @m.xm1.msky130_fd_pr__pfet_01v8[vdsat]
+save @m.xm1.msky130_fd_pr__pfet_01v8[cgg]
+save @m.xm1.msky130_fd_pr__pfet_01v8[cgd]
+op
+dc temp -40 125 1
+*plot i(vmeas2)
+write BGR_EC.raw
+.endc
+
+**** end user architecture code
+**.ends
+.end
